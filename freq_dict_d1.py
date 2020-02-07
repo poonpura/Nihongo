@@ -47,7 +47,7 @@ def p_lexer(text):
         if text[idx - 1: idx + 1] == "んで":
             idx2 = first_occ(dividers, text, idx + 1)
             return helper(text, idx2)
-        return [text[:idx]] + p_lexer(text[idx:])
+        return [text[:idx]] + p_lexer(text[idx:]) 
     return helper(text, idx)
 
 """

@@ -1,13 +1,11 @@
 """
-Test cases for freqency dictionary module.
+Test script for freqency dictionary module.
 
 Author: Pura Peetathawatchai
 """
 
 from freq_dict_d1 import *
-import freq_dict_d1
-
-x = first_occ(["a", "b"], "")
+from lookup import *
 
 def test_p_lexer():
     print("Testing p_lexer and helpers")
@@ -42,4 +40,14 @@ def test_p_lexer():
     assert p_lexer(txt) == output
     print("p_lexer: PASS!")
 
+def test_lookup():
+    print("Testing helper functions from the [lookup] module. May be time consuming.")
+    print("Testing is_valid_word")
+    assert is_valid_word("食べる") == True
+    assert is_valid_word("食べ") == False
+    assert is_valid_word("アルバイト") == True
+    assert is_valid_word("食べられる") == True
+    print("is_valid_word: PASS!")
+
 test_p_lexer()
+test_lookup()
