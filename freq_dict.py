@@ -33,7 +33,6 @@ def lex(text):
         for token in chunk:
             stream.append(_extr(token))
     _regroup(stream)
-    print(str(stream))
     return stream
 
 """
@@ -73,6 +72,10 @@ def _regroup(stream):
                 stream[i - 1]= stream[i - 1] + hira
                 stream.remove(hira)
                 _del_d(stream, hira)
+            else:
+                tl = stream[i + 1:]
+                _del_d(tl, hira)
+                stream[i + 1:] = tl
         except ValueError:
             pass
     _del_d(stream, 'で')
