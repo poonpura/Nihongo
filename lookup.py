@@ -32,7 +32,7 @@ website source code has been updated.
 Precondition: [word] contains only Japanese characters.
 """
 def is_valid_word(word):
-    browser = webdriver.Chrome()
+    browser = webdriver.Chrome() # set to be path to your chromedriver.exe
     from selenium.webdriver.support.ui import Select
 
     browser.get('http://edrdg.org/jmdictdb/cgi-bin/srchformq.py?svc=jmdict&sid=&')
