@@ -8,6 +8,9 @@ Makes use of the CaboCha Japanese NLP module by Taku Kudo. Thus, installation
 of CaboCha is a prerequisite to using this module. For more information see:
 https://rstudio-pubs-static.s3.amazonaws.com/462850_98582068058d4191a70b7246d2ceee29.html
 
+Also requires Naked module. To install, run ```pip install Naked``` in the
+command line.
+
 Loosely inspired by methodology in "A Frequency Dictionary of Japanese" by
 Tono et al.
 
@@ -17,14 +20,16 @@ Author: Pura Peetathawatchai
 import cabocha
 from cabocha.analyzer import CaboChaAnalyzer
 analyzer = CaboChaAnalyzer()
+from Naked.toolshed.shell import execute_js, muterun_js
+import json
 
 """
-Returns a token stream (type: string list) of <text>. A phrase token
+Returns a token stream (type: string list) of ```text```. A phrase token
 is either a noun, verb or adjective phrase or a particle. Ignores punctuation
 and spacing.
 
 Parameters:
-<text> : <str>
+```text``` : ```str```
 """
 def lex(text):
     tree = analyzer.parse(text)
@@ -38,7 +43,7 @@ def lex(text):
 """
 (Helper)
 
-Extracts the string from the <Token> object.
+Extracts the string from the ```Token``` object.
 
 Uses string slicing methods which is not preferred but unavoidable due to lack
 of accessible documentation in CaboCha module.
@@ -80,3 +85,18 @@ def _regroup(stream):
             pass
     _del_d(stream, 'で')
     _del_d(stream, 'だ')
+
+"""
+Returns the deconjugated verb base of ```verb```.
+
+This function utilizes Naked to run the Japanese verb deconjugator module by
+https://github.com/mistval in JavaScript. The console output is intercepted,
+stored as a variable, then processed locally.
+
+Precondition: ```verb``` is a valid Japanese verb.
+"""
+def deconjugate(verb):
+    naked_object = muterun_js('deconjugator.js', verb)
+    jstr = naked_object.stdout.decode("utf-8")
+    jobj = json.loads(jstr)
+    return jobj[0]["base"]
