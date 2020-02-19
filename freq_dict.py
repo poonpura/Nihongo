@@ -22,7 +22,7 @@ HIRAGANA = ["あ","い","う","え","お","か","が","き","ぎ","く","ぐ","�
 "ご","さ","ざ","し","じ","す","ず","せ","ぜ","そ","ぞ","た","だ","ち","ぢ","つ","づ",
 "て","で","と","ど","な","に","ぬ","ね","の","は","ば","ぱ","ひ","び","ぴ","ふ","ぶ",
 "ぷ","へ","べ","ぺ","ほ","ぼ","ぽ","ま","み","む","め","も","や","ゆ","よ","ら","り",
-"る","れ","ろ","わ","を"]
+"る","れ","ろ","わ","を", "っ"]
 PUNCTUATION = ["。","、","「","」","！","？","￥","＠","＃","＄","％","＾","＆","＊",
 "（","）","ー","＿","＝","＋","『","』","｜","：","；","’","”","＜","＞", "・"] + \
 list(string.punctuation)
@@ -73,3 +73,22 @@ punctuation.
 """
 def freq_dict(text):
     return clean(raw_freq(text))
+
+"""
+Returns a list of vocabulary (ommitting hiragana-only terms and particles) that
+occur in ```text```, sorted by descending frequency
+"""
+def freq_rank(text):
+    dict = freq_dict(text)
+    return sorted(dict, key = dict.get, reverse = True)
+
+"""
+Returns a string containing the contents of ```file``` with '\n' characters
+removed.
+
+Precondition: ```file``` is a .txt file.
+"""
+def from_file(filename):
+    file = open(filename, 'r')
+    text = file.read().replace('\n', '')
+    return text
