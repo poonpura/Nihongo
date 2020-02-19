@@ -8,95 +8,68 @@ Makes use of the CaboCha Japanese NLP module by Taku Kudo. Thus, installation
 of CaboCha is a prerequisite to using this module. For more information see:
 https://rstudio-pubs-static.s3.amazonaws.com/462850_98582068058d4191a70b7246d2ceee29.html
 
-Also requires Naked module. To install, run ```pip install Naked``` in the
-command line.
-
-Loosely inspired by methodology in "A Frequency Dictionary of Japanese" by
-Tono et al.
-
 Author: Pura Peetathawatchai
 """
 
+import string
+import copy
 import cabocha
 from cabocha.analyzer import CaboChaAnalyzer
 analyzer = CaboChaAnalyzer()
-from Naked.toolshed.shell import execute_js, muterun_js
-import json
+
+# CONSTANTS
+HIRAGANA = ["あ","い","う","え","お","か","が","き","ぎ","く","ぐ","け","げ","こ",
+"ご","さ","ざ","し","じ","す","ず","せ","ぜ","そ","ぞ","た","だ","ち","ぢ","つ","づ",
+"て","で","と","ど","な","に","ぬ","ね","の","は","ば","ぱ","ひ","び","ぴ","ふ","ぶ",
+"ぷ","へ","べ","ぺ","ほ","ぼ","ぽ","ま","み","む","め","も","や","ゆ","よ","ら","り",
+"る","れ","ろ","わ","を"]
+PUNCTUATION = ["。","、","「","」","！","？","￥","＠","＃","＄","％","＾","＆","＊",
+"（","）","ー","＿","＝","＋","『","』","｜","：","；","’","”","＜","＞", "・"] + \
+list(string.punctuation)
 
 """
-Returns a token stream (type: string list) of ```text```. A phrase token
-is either a noun, verb or adjective phrase or a particle. Ignores punctuation
-and spacing.
+Returns the dictionary that maps each token base in ```text``` to their
+respective occurence frequency.
 
-Parameters:
-```text``` : ```str```
+The string is broken down into a stream of tokens by CaboCha. Each token is then
+deconjugated to yield their base form.
+
+Bound functional morphemes and particles are also considered as tokens by this
+function, so further processing of the output dictionary may be neccessary.
 """
-def lex(text):
+def raw_freq(text):
     tree = analyzer.parse(text)
     stream = []
     for chunk in tree:
         for token in chunk:
-            stream.append(_extr(token))
-    _regroup(stream)
-    return stream
+            base = token.feature_list[-3]
+            stream.append(base)
+
+    dict = {}
+    for token in stream:
+        if token in dict.keys():
+            dict[token]= dict[token] + 1
+        else:
+            dict[token] = 1
+
+    return dict
 
 """
-(Helper)
-
-Extracts the string from the ```Token``` object.
-
-Uses string slicing methods which is not preferred but unavoidable due to lack
-of accessible documentation in CaboCha module.
+Returns a copy of ```dict``` with all keys (tokens) containing only hiragana or
+punctuation removed.
 """
-def _extr(token):
-    rep = repr(token)
-    i1 = rep.index('"')
-    i2 = rep.index('"', i1 + 1)
-    return rep[i1 + 1:i2]
+def clean(dict):
+    output = {}
+    for token in dict.keys():
+        if not all(c in HIRAGANA + PUNCTUATION for c in list(token)):
+            output[token] = dict[token]
+
+    return output
 
 """
-(Helper)
-
-Reorganizes the token stream to include the 'て'/'で' as part of the token of
-a verb in 'ーて' form.
+Returns the dictionary that maps each token base in ```text``` to their
+respective occurence frequency, ommitting tokens containing only hiragana or
+punctuation.
 """
-def _regroup(stream):
-    if stream[0] in {'て', 'で', 'た', 'だ'}:
-        return stream[0] + _regroup(stream[1:])
-    def _del_t(stream, hira):
-        while hira in stream:
-            i = stream.index(hira)
-            stream[i - 1]= stream[i - 1] + hira
-            stream.remove(hira)
-    _del_t(stream, 'て')
-    _del_t(stream, 'た')
-    def _del_d(stream, hira):
-        try:
-            i = stream.index(hira)
-            if len(stream[i - 1]) > 1 and stream[i - 1][-1] == 'ん':
-                stream[i - 1]= stream[i - 1] + hira
-                stream.remove(hira)
-                _del_d(stream, hira)
-            else:
-                tl = stream[i + 1:]
-                _del_d(tl, hira)
-                stream[i + 1:] = tl
-        except ValueError:
-            pass
-    _del_d(stream, 'で')
-    _del_d(stream, 'だ')
-
-"""
-Returns the deconjugated verb base of ```verb```.
-
-This function utilizes Naked to run the Japanese verb deconjugator module by
-https://github.com/mistval in JavaScript. The console output is intercepted,
-stored as a variable, then processed locally.
-
-Precondition: ```verb``` is a valid Japanese verb.
-"""
-def deconjugate(verb):
-    naked_object = muterun_js('deconjugator.js', verb)
-    jstr = naked_object.stdout.decode("utf-8")
-    jobj = json.loads(jstr)
-    return jobj[0]["base"]
+def freq_dict(text):
+    return clean(raw_freq(text))
