@@ -55,12 +55,10 @@ def on_url(f, url):
 Returns the frequency dictionary of the textual contents of ```URL```.
 """
 def dict(url):
-    f = lambda x: freq_dict.f(x)
-    return on_url(f, url)
+    return on_url(lambda x: freq_dict.f(x), url)
 
 """
 Returns the frequency ranking of the textual contents of ```URL```.
 """
 def rank(url):
-    f = lambda x: freq_dict.f_rank(x)
-    return on_url(f, url)
+    return on_url(lambda x: freq_dict.f_rank(x), url)
