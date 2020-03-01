@@ -71,15 +71,15 @@ Returns the dictionary that maps each token base in ```text``` to their
 respective occurence frequency, ommitting tokens containing only hiragana or
 punctuation.
 """
-def freq_dict(text):
+def f(text):
     return clean(raw_freq(text))
 
 """
 Returns a list of vocabulary (ommitting hiragana-only terms and particles) that
 occur in ```text```, sorted by descending frequency
 """
-def freq_rank(text):
-    dict = freq_dict(text)
+def f_rank(text):
+    dict = f(text)
     return sorted(dict, key = dict.get, reverse = True)
 
 """
