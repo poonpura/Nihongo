@@ -1,4 +1,4 @@
-Dependencies: 
+<b>Dependencies:</b>
 
 Python version 3.6.8+
 
@@ -13,7 +13,7 @@ For more information on installing driver, see https://pypi.org/project/selenium
 Pandas
 - can be installed via PIP or Anaconda. 
 
-Installation:
+<b>Installation:</b>
 1. Download the repository as a zip and unzip
 2. Open web_scrape.py and, at line 26, change the path name to be the path to your installed ChromeDriver on your computer.
 
