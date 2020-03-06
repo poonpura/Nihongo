@@ -8,6 +8,8 @@ Makes use of the CaboCha Japanese NLP module by Taku Kudo. Thus, installation
 of CaboCha is a prerequisite to using this module. For more information see:
 https://rstudio-pubs-static.s3.amazonaws.com/462850_98582068058d4191a70b7246d2ceee29.html
 
+To export the data as a csv file, Pandas is required.
+
 Author: Pura Peetathawatchai
 """
 
@@ -16,6 +18,7 @@ import copy
 import cabocha
 from cabocha.analyzer import CaboChaAnalyzer
 analyzer = CaboChaAnalyzer()
+
 
 # CONSTANTS
 HIRAGANA = ["あ","い","う","え","お","か","が","き","ぎ","く","ぐ","け","げ","こ",
@@ -37,7 +40,7 @@ deconjugated to yield their base form.
 Bound functional morphemes and particles are also considered as tokens by this
 function, so further processing of the output dictionary may be neccessary.
 """
-def raw_freq(text):
+def _raw_freq(text):
     tree = analyzer.parse(text)
     stream = []
     for chunk in tree:
@@ -58,7 +61,7 @@ def raw_freq(text):
 Returns a copy of ```dict``` with all keys (tokens) containing only hiragana or
 punctuation removed.
 """
-def clean(dict):
+def _clean(dict):
     output = {}
     for token in dict.keys():
         if not all(c in HIRAGANA + PUNCTUATION for c in list(token)):
@@ -72,7 +75,7 @@ respective occurence frequency, ommitting tokens containing only hiragana or
 punctuation.
 """
 def f(text):
-    return clean(raw_freq(text))
+    return _clean(_raw_freq(text))
 
 """
 Returns a list of vocabulary (ommitting hiragana-only terms and particles) that
