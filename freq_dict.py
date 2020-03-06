@@ -42,18 +42,18 @@ function, so further processing of the output dictionary may be neccessary.
 """
 def _raw_freq(text):
     tree = analyzer.parse(text)
-    stream = []
+    stream= []
     for chunk in tree:
         for token in chunk:
             base = token.feature_list[-3]
             stream.append(base)
 
-    dict = {}
+    dict= {}
     for token in stream:
         if token in dict.keys():
             dict[token]= dict[token] + 1
         else:
-            dict[token] = 1
+            dict[token]= 1
 
     return dict
 
@@ -62,7 +62,7 @@ Returns a copy of ```dict``` with all keys (tokens) containing only hiragana or
 punctuation removed.
 """
 def _clean(dict):
-    output = {}
+    output= {}
     for token in dict.keys():
         if not all(c in HIRAGANA + PUNCTUATION for c in list(token)):
             output[token] = dict[token]
@@ -83,7 +83,7 @@ occur in ```text```, sorted by descending frequency
 """
 def f_rank(text):
     dict = f(text)
-    return sorted(dict, key = dict.get, reverse = True)
+    return sorted(dict, key=dict.get, reverse=True)
 
 """
 Returns a string containing the contents of ```file``` with '\n' characters
