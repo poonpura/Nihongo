@@ -6,7 +6,7 @@ will open the Google Chrome browser to carry out certain procedures.
 
 Prerequisites:
 Google Chrome version 80.0.3987.87
-Selenium webdriver for Chrome with PATH specified.
+Selenium webdriver for Chrome with PATH specified (see line 26)
 For more information on installing driver, see:
 https://pypi.org/project/selenium/
 
