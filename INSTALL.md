@@ -15,6 +15,6 @@ Pandas
 
 Installation:
 1. Download the repository as a zip and unzip
-2. Locate to the directory
+2. Open web_scrape.py and, at line 26, change the path name to be the path to your installed ChromeDriver on your computer.
 
 See README file on usage.
