@@ -13,8 +13,8 @@ For more information on installing driver, see https://pypi.org/project/selenium
 Pandas
 - can be installed via PIP or Anaconda. 
 
-Installation and Usage:
+Installation:
 1. Download the repository as a zip and unzip
 2. Locate to the directory
-3. Run python on the command shell
-4. import 
+
+See README file on usage.
