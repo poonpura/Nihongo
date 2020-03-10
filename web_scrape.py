@@ -120,4 +120,12 @@ def tree_dict(url):
     dict, _ = tree_dict_acc(url, [])
     return dict
 
+"""
+Returns the combined frequency ranked list of every child webpage of ```url```,
+including itself. (May take siginificant time to run.)
+"""
+def tree_rank(url):
+    dict = tree_dict(url)
+    return sorted(dict, key=dict.get, reverse=True)
+
 #print(tree_dict("https://www.nintendo.co.jp/")) #FOR TESTING
