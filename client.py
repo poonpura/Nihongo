@@ -27,15 +27,21 @@ def rank_of_file(filename):
 
 """
 Returns the frequency dictionary of the textual contents of ```URL```.
+
+If ```deepsearch``` is True, performs a recursive analysis on every child
+webpage. The default value is False.
 """
-def dict_of_web(url):
-    return web_scrape.dict(url)
+def dict_of_web(url, deepsearch=False):
+    return web_scrape.tree_dict(url) if deepsearch else web_scrape.dict(url)
 
 """
 Returns the frequency ranking of the textual contents of ```URL```.
+
+If ```deepsearch``` is True, performs a recursive analysis on every child
+webpage. The default value is False.
 """
-def rank_of_web(url):
-    return web_scrape.rank(url)
+def rank_of_web(url, deepsearch=False):
+    return web_scrape.tree_rank(url) if deepsearch else web_scrape.rank(url)
 
 """
 Exports ```data``` as the csv file 'data.csv' in the directory. If such a file
