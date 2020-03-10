@@ -90,7 +90,7 @@ def tree_dict(url):
         browser.get(url)
         r_url = browser.current_url
         elems = set(browser.find_elements_by_xpath("//*[contains(@href,'"+r_url+"')]"))
-        acc= acc + [r_url]
+        acc.append(r_url)
 
         link_lst= []
         for elem in elems:
@@ -108,4 +108,4 @@ def tree_dict(url):
     dict, _ = tree_dict_acc(url, [])
     return dict
 
-print(tree_dict("https://www.nintendo.co.jp/"))
+#print(tree_dict("https://www.nintendo.co.jp/")) #FOR TESTING
