@@ -72,6 +72,14 @@ Returns the frequency ranking of the textual contents of ```URL```.
 def rank(url):
     return _on_url(lambda x: freq_dict.f_rank(x), url)
 
+"""
+Returns the combined dictionary ```d``` of ```d1``` and ```d2```, where
+```d.keys()``` is the union of ```d1.keys()``` and ```d2.keys()```, and for
+keys in the intersection, the corresponding values are the sum of values from
+each dictionary.
+
+Precondtion: ```d1``` and ```d2``` are dictionaries with integer values.
+"""
 def _add(d1, d2):
     d= copy.deepcopy(d1)
     for k in d2.keys():
@@ -81,6 +89,10 @@ def _add(d1, d2):
             d[k]= d2[k]
     return d
 
+"""
+Returns the combined frequency dictionary of every child webpage of ```url```,
+including itself. (May take siginificant time to run.)
+"""
 def tree_dict(url):
     def tree_dict_acc(url, acc):
         if url in acc:
