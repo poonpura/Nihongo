@@ -39,6 +39,9 @@ def _deromanize(text):
     for i in range(length):
         if not text[i] in string.punctuation + string.ascii_letters:
             acc= acc + text[i]
+        if i > 0 and i % 100 == 0:
+            if acc[-100:].isnumeric():
+                acc= acc[:-100]
     return acc
 
 """
@@ -115,6 +118,7 @@ def tree_dict(url):
             xtr, acc= tree_dict_acc(link, acc)
             dict= _add(dict, xtr)
 
+        print(acc)
         return dict, acc
 
     dict, _ = tree_dict_acc(url, [])
